@@ -1,26 +1,32 @@
+using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class Enemy_script : MonoBehaviour
 {
-    public string tag_name;
-    private Transform playerTransform;
-    private Rigidbody2D rigidBody;
+    public GameObject bullet;
+    public Transform bulletPosition;
+    private float timer;
+    private void Start()
+    { 
 
-    private void Awake()
-    {
-        playerTransform = GameObject.Find(tag_name).transform;
-        rigidBody = GetComponent<Rigidbody2D>();
     }
 
     private void Update()
     {
-        Vector2 direction = playerTransform.position - transform.position;
-        direction = direction.normalized;
+        timer+= Time.deltaTime;
+        if (timer>2)
+        {
+            timer=0;
+            Shoot();
+        }
     }
-    private void OnCollisionEnter2D(Collision2D collision)
+    void Shoot()
     {
-        if (collision.gameObject.tag == "Bullet")
-            Destroy(gameObject);
+        GameObject temp = Instantiate(bullet, bulletPosition.position, quaternion.identity);
+    }
+ private void OnCollisionEnter2D(Collision2D collision)
+    {
+       if (collision.gameObject.CompareTag("Bullet")) 
+       { Destroy(gameObject);}
     }
 }
